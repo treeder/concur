@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{concur}
-  s.version = "0.0.2"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
   s.date = %q{2011-03-10}
-  s.description = %q{A concurrency library for Ruby like java.util.concurrency By http://www.appoxy.com}
+  s.description = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
   s.email = %q{travis@appoxy.com}
   s.extra_rdoc_files = [
     "README.markdown"
@@ -24,8 +24,8 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/appoxy/concur/}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.0}
-  s.summary = %q{A concurrency library for Ruby like java.util.concurrency. By http://www.appoxy.com}
+  s.rubygems_version = %q{1.6.2}
+  s.summary = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
   s.test_files = [
     "test/executor_spec.rb",
     "test/job.rb"

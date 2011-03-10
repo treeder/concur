@@ -19,31 +19,55 @@ module Concur
 
     end
 
-    def self.new_thread_pool_executor(options={})
+    def self.new_single_threaded_executor(options={})
       executor = Executor.new
-      executor.thread_pool = ThreadPool.new(options[:max_size])
-      p executor.thread_pool
+      executor.thread_pool = SingleThreaded.new
       executor
     end
 
-    def execute(runnable, &blk)
-      puts 'executing ' + runnable.inspect
+    def self.new_multi_threaded_executor(options={})
+      executor = Executor.new
+      executor.thread_pool = MultiThreaded.new
+      executor
+    end
+
+    def self.new_thread_pool_executor(max_size, options={})
+      executor = Executor.new
+      executor.thread_pool = ThreadPool.new(max_size)
+      executor
+    end
+
+    def execute(runnable=nil, &blk)
       f = Future.new(runnable, &blk)
-      if @thread_pool
-        @thread_pool.process(f)
-      else
-        @thread = Thread.new do
-          f.thread = @thread
-          f.call
-        end
-      end
+      @thread_pool.process(f)
       f
     end
 
     def shutdown
-       if @thread_pool
-         @thread_pool.shutdown
-       end
+      @thread_pool.shutdown
+    end
+  end
+
+  # todo: should maybe have these backends extend Executor and just override what's necessary
+  class SingleThreaded
+    def process(f)
+      f.call
+    end
+
+    def shutdown
+    end
+  end
+
+  class MultiThreaded
+    def process(f)
+      @thread = Thread.new do
+        f.thread = @thread
+        f.call
+      end
+    end
+
+    def shutdown
+
     end
   end
 end

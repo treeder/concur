@@ -37,12 +37,11 @@ module Concur
             while @running
               f = @queue.pop
               f.thread = t
-              f.pool = self
               f.call
             end
-            Concur.logger.info "Thread dying " + t.inspect
+#            Concur.logger.info "Thread dying " + t.inspect
           end
-          Concur.logger.info "Created new thread " + t.inspect
+          Concur.logger.debug "Created new thread " + t.inspect
           @threads << t
         end
       end

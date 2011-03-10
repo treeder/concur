@@ -3,19 +3,9 @@ module Concur
   #An Future is a class that captures the results of a threaded object so you can retreive the results later.
   #This is what is returned from Executors.
   class Future
-    attr_accessor :thread, :pool
+    attr_accessor :thread
 
     def initialize(runnable=nil, &block)
-
-#      if block
-#        @thread = Thread.new do
-#          @result = yield
-#        end
-#      else
-#        @thread = Thread.new do
-#          @result = runnable.run
-#        end
-#      end
 
       @mutex = Mutex.new
       @cv = ConditionVariable.new
@@ -27,13 +17,23 @@ module Concur
     end
 
     def run
-      @result = @callable.call
-      @complete = true
-      @cv.signal
+      begin
+        @result = @callable.call
+      rescue Exception => ex
+        @ex = ex
+      end
+      @mutex.synchronize do # do we even need to synchronize? run should only ever be called once
+        @complete = true
+        @cv.broadcast
+      end
     end
 
     def call
       run
+    end
+
+    def complete?
+      @complete
     end
 
     # Returns results. Will wait for thread to complete execution if not already complete.
@@ -43,6 +43,9 @@ module Concur
         unless @complete
           @cv.wait(@mutex)
         end
+      end
+      if @ex
+        raise @ex
       end
       @result
     end

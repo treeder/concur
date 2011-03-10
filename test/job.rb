@@ -8,7 +8,7 @@ class Job
   end
 
   def run
-    sleep 0.25
+    sleep 3
     puts "Finished #{@i}"
     "response #{@i}"
   end
