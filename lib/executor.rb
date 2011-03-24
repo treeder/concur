@@ -37,6 +37,20 @@ module Concur
       executor
     end
 
+    # NOT WORKING
+    def self.new_eventmachine_executor()
+      require_relative 'executors/event_machine_executor'
+      executor = EventMachineExecutor.new()
+      executor
+    end
+
+    # NOT WORKING
+    def self.new_neverblock_executor(max_size)
+      require_relative 'executors/never_block_executor'
+      executor = NeverBlockExecutor.new(max_size)
+      executor
+    end
+
     def execute(runnable=nil, &blk)
       f = Future.new(runnable, &blk)
       @thread_pool.process(f)
