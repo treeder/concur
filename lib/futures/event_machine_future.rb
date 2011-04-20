@@ -43,8 +43,15 @@ module Concur
 
 
     end
-
     def errback &blk
+        @errblk = blk
+      end
+
+      def callback &blk
+        @callblk = blk
+      end
+
+    def errback2 &blk
       puts 'EventMachineFutureCallback.errback'
       proc = Proc.new do
         puts 'errback proc'
@@ -55,7 +62,7 @@ module Concur
       puts 'errback set'
     end
 
-    def callback &blk
+    def callback2 &blk
       puts 'EventMachineFutureCallback.callback'
       proc = Proc.new do
         puts 'callback proc @callback=' + @callback.inspect
@@ -66,17 +73,17 @@ module Concur
       end
       @callbackable.callback &proc
     end
-
-    def call_callback(response)
-      puts 'call_callback=' + response.inspect
-      return unless callblk
-      callblk.call(response)
-    end
-
-    def call_errback(response)
-      return unless errblk
-      errblk.call(response)
-    end
+#
+#    def call_callback(response)
+#      puts 'call_callback=' + response.inspect
+#      return unless callblk
+#      callblk.call(response)
+#    end
+#
+#    def call_errback(response)
+#      return unless errblk
+#      errblk.call(response)
+#    end
   end
 
   class EventMachineFuture
@@ -110,12 +117,12 @@ module Concur
       end
 
       http = @callbackable
-      http.errback {
+      http.errback2 {
         puts 'completion errback'
         @ex = EventMachineError.new(http)
         complete
       }
-      @result = (http.callback {
+      @result = (http.callback2 {
         puts 'completion callback ' + @callback.inspect
         ret = nil
         if @callback
