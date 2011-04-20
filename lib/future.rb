@@ -1,9 +1,20 @@
+#An Future is a class that captures the results of a threaded object so you can retrieve the results later.
+#This is what is returned from Executors.
+#
+# This particular Future can be used for synchronous blocks / runnables / callables that are run in a separate thread.
+
 module Concur
 
-  #An Future is a class that captures the results of a threaded object so you can retreive the results later.
-  #This is what is returned from Executors.
-  class Future
-    attr_accessor :thread
+  module Future
+    def future?
+      true
+    end
+  end
+
+  class StandardFuture
+    include Future
+
+    attr_accessor :thread, :ex
 
     def initialize(runnable=nil, &block)
 

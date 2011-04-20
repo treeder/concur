@@ -37,7 +37,6 @@ module Concur
       executor
     end
 
-    # NOT WORKING
     def self.new_eventmachine_executor()
       require_relative 'executors/event_machine_executor'
       executor = EventMachineExecutor.new()
@@ -52,7 +51,7 @@ module Concur
     end
 
     def execute(runnable=nil, &blk)
-      f = Future.new(runnable, &blk)
+      f = StandardFuture.new(runnable, &blk)
       @thread_pool.process(f)
       f
     end

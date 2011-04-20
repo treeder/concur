@@ -19,6 +19,7 @@
     end
     pooled_duration = Time.now - start_time
     puts "pooled_duration=" + pooled_duration.to_s
+    executor.shutdown
 
 ## Futures
 
