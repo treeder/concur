@@ -48,7 +48,7 @@ module Concur
       end
 
       def callback &blk
-        @callblk = blk
+        @callback = blk
       end
 
     def errback2 &blk
