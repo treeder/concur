@@ -23,7 +23,7 @@ module Concur
       puts 'EventMachineFutureCallback.initialize: ' + callbackable.inspect
       @callbackable = callbackable
       if block_given?
-        @callback = block
+        @callblk = block
       end
     end
 
