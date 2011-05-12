@@ -4,17 +4,21 @@ require_relative '../futures/event_machine_future'
 module Concur
   class EventMachineExecutor
 
-
     def initialize
-      @futures = []
-      @em_thread = Thread.new do
-        EventMachine.run do
-          puts 'Starting EventMachineExecutor...'
+      unless EventMachine.reactor_running? # also check EventMachine.reactor_thread? ??
+        @in_thread = true
+        @em_thread = Thread.new do
+          EventMachine.run do
+            puts 'Starting EventMachineExecutor...'
 #          @futures.each do |f|
 #
 #          end
+          end
+          puts 'EventMachine loop done in executor thread'
         end
-        puts 'EventMachine loop done'
+      else
+        puts 'Reactor already running...'
+        @in_thread = false
       end
     end
 
@@ -26,8 +30,19 @@ module Concur
     end
 
     def shutdown
-      @em_thread.kill
+      if @in_thread
+        EventMachine.stop
+        @em_thread.kill
+      end
       puts 'shutdown'
+    end
+
+    # Abstracts the http client used that is suitable for the executor
+    def http_request(params, &blk)
+
+      f = EventMachineFuture2.new(params, &blk)
+
+
     end
 
   end

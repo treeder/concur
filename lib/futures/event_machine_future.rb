@@ -43,13 +43,14 @@ module Concur
 
 
     end
-    def errback &blk
-        @errblk = blk
-      end
 
-      def callback &blk
-        @callblk = blk
-      end
+    def errback &blk
+      @errblk = blk
+    end
+
+    def callback &blk
+      @callblk = blk
+    end
 
     def errback2 &blk
       puts 'EventMachineFutureCallback.errback'
@@ -69,7 +70,7 @@ module Concur
         if @callblk
           @result = @callblk.call(@callbackable)
         end
-        blk.call(@result)        
+        blk.call(@result)
       end
       @callbackable.callback &proc
     end
@@ -86,10 +87,88 @@ module Concur
 #    end
   end
 
+
+  class EventMachineFuture2
+    require 'em-http'
+    include Concur::Future
+
+    attr_accessor :ex, :result
+
+    def initialize(http_data, &block)
+      @http_data = http_data
+      if block_given?
+        @blk = block
+      end
+
+      puts 'http_data=' + http_data.inspect
+
+      req = EventMachine::HttpRequest.new(http_data[:base_url])
+
+      opts = {:timeout => http_data[:timeout], :head => http_data[:headers]} #, :ssl => true
+
+      if http_data[:http_method] == :post
+        http = req.post opts.merge(:path=>http_data[:path], :body=>http_data[:body])
+      else
+        http = req.get opts.merge(:path=>http_data[:path], :query=>http_data[:query])
+      end
+      if http.error.empty?
+        http.errback {
+          begin
+            puts 'Uh oh'
+            p http.response_header.status
+            p http.response_header
+            p http.response
+            @ex = StandardError.new("ERROR: #{http.response_header.status} #{http.response}")
+          rescue => ex
+            @ex = ex
+          end
+          self.complete
+        }
+        http.callback {
+          begin
+            puts 'success callback'
+            p http.response_header.status
+            p http.response_header
+            @result = @blk.call(http.response)
+          rescue => ex
+            @ex = ex
+          end
+          self.complete
+        }
+      end
+
+      def complete
+        @complete = true
+      end
+
+      def complete?
+        @complete
+      end
+
+      # Returns results. Will wait for thread to complete execution if not already complete.
+      def get
+#      @thread.value
+        while !@complete
+          # todo: gotta be a better way
+          puts 'sleeping'
+          sleep 0.5
+        end
+        return get_response
+      end
+
+      def get_response
+        if @ex
+          raise @ex
+        end
+        @result
+      end
+    end
+  end
+
   class EventMachineFuture
     include Concur::Future
 
-    attr_accessor :ex,:result
+    attr_accessor :ex, :result
 
     def initialize(callable, &block)
 
@@ -101,12 +180,11 @@ module Concur
       end
     end
 
-
     def run
       puts 'EMFuture.run'
       p @callable
       begin
-        @callbackable = @callable.call
+        @callbackable = @callable.call(self)
         puts 'done @callable.call ' + @callbackable.inspect
       rescue Exception => ex
         @ex = ex
@@ -122,7 +200,8 @@ module Concur
         @ex = EventMachineError.new(http)
         complete
       }
-      @result = (http.callback2 {|result|
+      @result = (http.callback2 { |result|
+        puts 'completion errback'
         @result = result
         complete
       })
@@ -161,4 +240,5 @@ module Concur
       @result
     end
   end
+
 end
