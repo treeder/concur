@@ -108,6 +108,12 @@ module Concur
 
       if http_data[:http_method] == :post
         http = req.post opts.merge(:path=>http_data[:path], :body=>http_data[:body])
+      elsif http_data[:http_method] == :put
+        http = req.put opts.merge(:path=>http_data[:path], :body=>http_data[:body])
+      elsif http_data[:http_method] == :head
+        http = req.head opts.merge(:path=>http_data[:path])
+      elsif  http_data[:http_method] == :delete
+        http = req.delete opts.merge(:path=>http_data[:path])
       else
         http = req.get opts.merge(:path=>http_data[:path], :query=>http_data[:query])
       end
@@ -129,7 +135,7 @@ module Concur
             puts 'success callback'
             p http.response_header.status
             p http.response_header
-            @result = @blk.call(http.response)
+            @result = @blk.call(http)
           rescue => ex
             @ex = ex
           end
