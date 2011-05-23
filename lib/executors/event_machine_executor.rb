@@ -16,6 +16,7 @@ module Concur
           end
           puts 'EventMachine loop done in executor thread'
         end
+        sleep 0.1 # let EM startup
       else
         puts 'Reactor already running...'
         @in_thread = false
@@ -39,10 +40,7 @@ module Concur
 
     # Abstracts the http client used that is suitable for the executor
     def http_request(params, &blk)
-
       f = EventMachineFuture2.new(params, &blk)
-
-
     end
 
   end

@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.7.2}
   s.summary = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
   s.test_files = [
-    "test/executor_spec.rb",
+    "test/test_concur.rb",
     "test/job.rb"
   ]
 

@@ -28,15 +28,19 @@ module Concur
     end
 
     def run
+      puts 'running StandardFuture'
       begin
         @result = @callable.call
+        puts 'callable called: ' + @result.inspect
       rescue Exception => ex
+        puts 'error occurred'
         @ex = ex
       end
       @mutex.synchronize do # do we even need to synchronize? run should only ever be called once
         @complete = true
-        @cv.broadcast
       end
+      @cv.broadcast
+
     end
 
     def call
@@ -50,9 +54,11 @@ module Concur
     # Returns results. Will wait for thread to complete execution if not already complete.
     def get
 #      @thread.value
-      @mutex.synchronize do
-        unless @complete
-          @cv.wait(@mutex)
+      unless @complete
+        @mutex.synchronize do
+          unless @complete
+            @cv.wait(@mutex)
+          end
         end
       end
       if @ex
@@ -61,4 +67,6 @@ module Concur
       @result
     end
   end
+
+
 end

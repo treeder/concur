@@ -87,6 +87,24 @@ module Concur
 #    end
   end
 
+  class HttpResponseWrapper
+    def initialize(em_http)
+      @em_http = em_http
+    end
+
+    def headers
+      @em_http.response_header
+    end
+
+    def body
+      @em_http.response
+    end
+
+    def status
+      @em_http.response_header.status
+    end
+
+  end
 
   class EventMachineFuture2
     require 'em-http'
@@ -111,6 +129,7 @@ module Concur
       else
         http = req.get opts.merge(:path=>http_data[:path], :query=>http_data[:query])
       end
+
       if http.error.empty?
         http.errback {
           begin
@@ -127,41 +146,62 @@ module Concur
         http.callback {
           begin
             puts 'success callback'
-            p http.response_header.status
-            p http.response_header
-            @result = @blk.call(http.response)
+#            puts 'status=' + http.response_header.status
+#            puts 'response header=' + http.response_header
+            if @blk
+              @result = @blk.call(HttpResponseWrapper.new(http))
+            else
+              @result = HttpResponseWrapper.new(http)
+            end
           rescue => ex
             @ex = ex
           end
           self.complete
         }
+      else
+        p http.error.inspect
+        @ex = StandardError.new(http.error)
+        self.complete
       end
 
-      def complete
-        @complete = true
-      end
 
-      def complete?
-        @complete
-      end
+    end
 
-      # Returns results. Will wait for thread to complete execution if not already complete.
-      def get
+
+    def complete
+      @complete = true
+    end
+
+    def complete?
+      @complete
+    end
+
+    # Returns results. Will wait for thread to complete execution if not already complete.
+    def get
 #      @thread.value
-        while !@complete
-          # todo: gotta be a better way
-          puts 'sleeping'
-          sleep 0.5
-        end
-        return get_response
+#      if !@complete
+#        # todo: gotta be a better way
+##          puts 'sleeping'
+##          sleep 0.1
+#        @fiber = Fiber.new do
+#          while !@complete
+#            sleep 0.1
+#          end
+#          Fiber.yield # give back control
+#        end
+#        @fiber.resume # start fiber
+#      end
+      while !@complete
+        sleep 0.1
       end
+      return get_response
+    end
 
-      def get_response
-        if @ex
-          raise @ex
-        end
-        @result
+    def get_response
+      if @ex
+        raise @ex
       end
+      @result
     end
   end
 
@@ -225,7 +265,7 @@ module Concur
     # Returns results. Will wait for thread to complete execution if not already complete.
     def get
 #      @thread.value
-      while not @complete
+      while !@complete
         # todo: gotta be a better way
         puts 'sleeping'
         sleep 0.5
