@@ -12,6 +12,7 @@ begin
         gemspec.authors = ["Travis Reeder"]
         gemspec.files = FileList['lib/**/*.rb']
         gemspec.add_dependency 'eventmachine'
+        gemspec.add_dependency 'em-http-request'
         gemspec.add_dependency 'faraday'
     end
     Jeweler::GemcutterTasks.new
