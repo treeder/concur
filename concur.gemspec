@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{concur}
-  s.version = "0.0.7"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
   s.email = %q{travis@appoxy.com}
   s.extra_rdoc_files = [
+    "LICENSE.markdown",
     "README.markdown"
   ]
   s.files = [
@@ -36,13 +37,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
+      s.add_runtime_dependency(%q<em-http-request>, [">= 0"])
       s.add_runtime_dependency(%q<faraday>, [">= 0"])
     else
       s.add_dependency(%q<eventmachine>, [">= 0"])
+      s.add_dependency(%q<em-http-request>, [">= 0"])
       s.add_dependency(%q<faraday>, [">= 0"])
     end
   else
     s.add_dependency(%q<eventmachine>, [">= 0"])
+    s.add_dependency(%q<em-http-request>, [">= 0"])
     s.add_dependency(%q<faraday>, [">= 0"])
   end
 end
