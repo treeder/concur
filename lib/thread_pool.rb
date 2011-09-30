@@ -2,7 +2,7 @@ require 'thread'
 begin
   require 'fastthread'
 rescue LoadError
-  $stderr.puts "Using the ruby-core thread implementation"
+  # $stderr.puts "Using the ruby-core thread implementation"
 end
 
 module Concur
