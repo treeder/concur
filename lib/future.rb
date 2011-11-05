@@ -28,12 +28,12 @@ module Concur
     end
 
     def run
-      puts 'running StandardFuture'
+      #Concur.logger.debug 'running StandardFuture'
       begin
         @result = @callable.call
-        puts 'callable called: ' + @result.inspect
+        Concur.logger.debug 'callable result: ' + @result.inspect
       rescue Exception => ex
-        puts 'error occurred'
+        Concur.logger.debug "Error occurred! #{ex.class.name}: #{ex.message}"
         @ex = ex
       end
       @mutex.synchronize do # do we even need to synchronize? run should only ever be called once

@@ -1,5 +1,6 @@
 
 require_relative 'executor'
+require_relative 'thread_pool'
 
 require 'logger'
 module Concur

@@ -8,7 +8,10 @@ end
 module Concur
 
   # Another example is here: # from: http://stackoverflow.com/questions/81788/deadlock-in-threadpool
-  class ThreadPool
+  class ThreadPool < Executor::Base
+
+    attr_reader :queue
+
     def initialize(max_size)
       @max_size = max_size
 #      @thread_queue = SizedQueue.new(max_size)
@@ -24,11 +27,19 @@ module Concur
       @running = false
     end
 
+
     def process(callable, &blk)
       callable = blk if block_given?
       @queue.push(callable)
       start_thread
     end
+
+    def execute(runnable=nil, &blk)
+      f = StandardFuture.new(runnable, &blk)
+      process(f)
+      f
+    end
+
 
     def start_thread
       @mutex.synchronize do
@@ -47,6 +58,12 @@ module Concur
       end
     end
 
+
+    def queue_size
+      @queue.size
+    end
+
+
     class UberThread < Thread
 
       def initialize
@@ -56,7 +73,6 @@ module Concur
     end
 
   end
-
 
 
 end

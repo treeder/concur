@@ -2,7 +2,7 @@ require 'eventmachine'
 require_relative '../futures/event_machine_future'
 
 module Concur
-  class EventMachineExecutor
+  class EventMachineExecutor < Executor::Base
 
     def initialize
       unless EventMachine.reactor_running? # also check EventMachine.reactor_thread? ??
