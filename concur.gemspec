@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{concur}
-  s.version = "0.0.8"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Travis Reeder"]
-  s.date = %q{2011-05-23}
+  s.authors = [%q{Travis Reeder}]
+  s.date = %q{2011-11-05}
   s.description = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
   s.email = %q{travis@appoxy.com}
   s.extra_rdoc_files = [
@@ -28,8 +28,8 @@ Gem::Specification.new do |s|
     "lib/thread_pool.rb"
   ]
   s.homepage = %q{http://github.com/appoxy/concur/}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.7.2}
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.8}
   s.summary = %q{A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com}
 
   if s.respond_to? :specification_version then
@@ -39,12 +39,21 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
       s.add_runtime_dependency(%q<em-http-request>, [">= 0"])
       s.add_runtime_dependency(%q<faraday>, [">= 0"])
+      s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
+      s.add_runtime_dependency(%q<em-http-request>, [">= 0"])
+      s.add_runtime_dependency(%q<faraday>, [">= 0"])
     else
+      s.add_dependency(%q<eventmachine>, [">= 0"])
+      s.add_dependency(%q<em-http-request>, [">= 0"])
+      s.add_dependency(%q<faraday>, [">= 0"])
       s.add_dependency(%q<eventmachine>, [">= 0"])
       s.add_dependency(%q<em-http-request>, [">= 0"])
       s.add_dependency(%q<faraday>, [">= 0"])
     end
   else
+    s.add_dependency(%q<eventmachine>, [">= 0"])
+    s.add_dependency(%q<em-http-request>, [">= 0"])
+    s.add_dependency(%q<faraday>, [">= 0"])
     s.add_dependency(%q<eventmachine>, [">= 0"])
     s.add_dependency(%q<em-http-request>, [">= 0"])
     s.add_dependency(%q<faraday>, [">= 0"])
