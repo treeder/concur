@@ -112,15 +112,17 @@ module Concur
 
   # Spins off a new thread per job
   class MultiThreaded < Executor::Base
-    def process(f)
+    def process(f, &blk)
+      f = StandardFuture.new(f, &blk)
       @thread = Thread.new do
-        f.thread = @thread
         f.call
       end
+      f.thread = @thread
+      f
     end
 
-    def execute(f)
-      process(f)
+    def execute(f, &blk)
+      process(f, &blk)
     end
 
     def shutdown
