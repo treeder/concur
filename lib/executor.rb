@@ -98,13 +98,15 @@ module Concur
 
   # todo: should maybe have these backends extend Executor and just override what's necessary
   class SingleThreaded < Executor::Base
-    def process(f)
+    def process(f=nil, &blk)
+      f = StandardFuture.new(f, &blk)
       f.call
+      f
     end
 
-    def execute(f)
-      process(f)
-    end
+    def execute(f=nil, &blk)
+         process(f, &blk)
+       end
 
     def shutdown
     end
@@ -112,7 +114,7 @@ module Concur
 
   # Spins off a new thread per job
   class MultiThreaded < Executor::Base
-    def process(f, &blk)
+    def process(f=nil, &blk)
       f = StandardFuture.new(f, &blk)
       @thread = Thread.new do
         f.call
@@ -121,7 +123,7 @@ module Concur
       f
     end
 
-    def execute(f, &blk)
+    def execute(f=nil, &blk)
       process(f, &blk)
     end
 
