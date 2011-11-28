@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "concur"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
-  s.date = "2011-11-26"
+  s.date = "2011-11-28"
   s.description = "A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com"
   s.email = "travis@appoxy.com"
   s.extra_rdoc_files = [
