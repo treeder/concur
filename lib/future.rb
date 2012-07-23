@@ -16,11 +16,12 @@ module Concur
 
     attr_accessor :thread, :ex
 
-    def initialize(runnable=nil, &block)
+    def initialize(runnable=nil, channel=nil, &block)
 
       @mutex = Mutex.new
       @cv = ConditionVariable.new
       @callable = runnable
+      @channel = channel
       if block_given?
         @callable = block
       end
@@ -30,7 +31,7 @@ module Concur
     def run
       #Concur.logger.debug 'running StandardFuture'
       begin
-        @result = @callable.call
+        @result = @callable.call(@channel)
         Concur.logger.debug 'callable result: ' + @result.inspect
       rescue Exception => ex
         Concur.logger.debug "Error occurred! #{ex.class.name}: #{ex.message}"

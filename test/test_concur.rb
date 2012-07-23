@@ -40,46 +40,46 @@ class TestConcur < Test::Unit::TestCase
     end
 
   end
+#
+#  def test_em_http_request
+#    executor = Concur::Executor.new_eventmachine_executor()
+#
+#    futures = []
+#    TestConcur.urls.each do |url|
+#      params_to_send = {}
+#      params_to_send[:base_url] = url
+#      params_to_send[:path] = "/"
+#      params_to_send[:http_method] = :get
+#      futures << executor.http_request(params_to_send) do |response|
+#        [response.headers.status, response]
+#      end
+#    end
+#    futures.each do |f|
+#      puts 'f=' + f.inspect
+#      puts 'got=' + f.get.inspect
+#      assert f.get[0] >= 200 && f.get[0] < 400
+#    end
+#
+##    sleep 5
+##      executor.shutdown
+#
+#  end
 
-  def test_em_http_request
-    executor = Concur::Executor.new_eventmachine_executor()
-
-    futures = []
-    TestConcur.urls.each do |url|
-      params_to_send = {}
-      params_to_send[:base_url] = url
-      params_to_send[:path] = "/"
-      params_to_send[:http_method] = :get
-      futures << executor.http_request(params_to_send) do |response|
-        [response.headers.status, response]
-      end
-    end
-    futures.each do |f|
-      puts 'f=' + f.inspect
-      puts 'got=' + f.get.inspect
-      assert f.get[0] >= 200 && f.get[0] < 400
-    end
-
-#    sleep 5
-#      executor.shutdown
-
-  end
-
-  def test_http_connect_error
-    executor = Concur::Executor.new_eventmachine_executor()
-    params_to_send = {}
-    params_to_send[:base_url] = "http://www.asdflasjdfklasjdf.com"
-    params_to_send[:path] = "/"
-    params_to_send[:http_method] = :get
-    future = executor.http_request(params_to_send) do |response|
-      [response.headers.status, response]
-    end
-    assert_raise(StandardError) do
-      'got=' + future.get.inspect
-    end
-
-    executor.shutdown
-  end
+  #def test_http_connect_error
+  #  executor = Concur::Executor.new_eventmachine_executor()
+  #  params_to_send = {}
+  #  params_to_send[:base_url] = "http://www.asdflasjdfklasjdf.com"
+  #  params_to_send[:path] = "/"
+  #  params_to_send[:http_method] = :get
+  #  future = executor.http_request(params_to_send) do |response|
+  #    [response.headers.status, response]
+  #  end
+  #  assert_raise(StandardError) do
+  #    'got=' + future.get.inspect
+  #  end
+  #
+  #  executor.shutdown
+  #end
 
 
   def test_speed_comparison
@@ -98,11 +98,11 @@ class TestConcur < Test::Unit::TestCase
     pooled_duration = run_gets("thread pool", executor)
     assert pooled_duration < (non_concurrent_duration/2)
     executor.shutdown
-
-    executor = Concur::Executor.new_eventmachine_executor()
-    em_duration = run_gets("eventmachine", executor)
-    assert em_duration < (non_concurrent_duration/2)
-    executor.shutdown
+    #
+    #executor = Concur::Executor.new_eventmachine_executor()
+    #em_duration = run_gets("eventmachine", executor)
+    #assert em_duration < (non_concurrent_duration/2)
+    #executor.shutdown
 
     @@durations.each do |s|
       puts s
