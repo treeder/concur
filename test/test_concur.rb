@@ -1,76 +1,11 @@
 gem 'test-unit'
 require 'test/unit'
-require 'em-http'
 require_relative '../lib/concur'
 require_relative 'job'
 
 
 class TestConcur < Test::Unit::TestCase
   @@durations = []
-
-  def test_threaded_http_request
-    executor = Concur::Executor.new_multi_threaded_executor()
-
-    futures = []
-    TestConcur.urls.each do |url|
-      params_to_send = {}
-      params_to_send[:base_url] = url
-      params_to_send[:path] = "/"
-      params_to_send[:http_method] = :get
-      futures << executor.http_request(params_to_send) do |response|
-        puts 'in block ' + response.inspect
-        puts 'in block status ' + response.status.inspect
-        [response.status, response]
-      end
-    end
-    futures.each do |f|
-      puts 'f=' + f.inspect
-      puts 'got=' + f.get.inspect
-      assert f.get[0] >= 200 && f.get[0] < 400
-    end
-
-  end
-#
-#  def test_em_http_request
-#    executor = Concur::Executor.new_eventmachine_executor()
-#
-#    futures = []
-#    TestConcur.urls.each do |url|
-#      params_to_send = {}
-#      params_to_send[:base_url] = url
-#      params_to_send[:path] = "/"
-#      params_to_send[:http_method] = :get
-#      futures << executor.http_request(params_to_send) do |response|
-#        [response.headers.status, response]
-#      end
-#    end
-#    futures.each do |f|
-#      puts 'f=' + f.inspect
-#      puts 'got=' + f.get.inspect
-#      assert f.get[0] >= 200 && f.get[0] < 400
-#    end
-#
-##    sleep 5
-##      executor.shutdown
-#
-#  end
-
-  #def test_http_connect_error
-  #  executor = Concur::Executor.new_eventmachine_executor()
-  #  params_to_send = {}
-  #  params_to_send[:base_url] = "http://www.asdflasjdfklasjdf.com"
-  #  params_to_send[:path] = "/"
-  #  params_to_send[:http_method] = :get
-  #  future = executor.http_request(params_to_send) do |response|
-  #    [response.headers.status, response]
-  #  end
-  #  assert_raise(StandardError) do
-  #    'got=' + future.get.inspect
-  #  end
-  #
-  #  executor.shutdown
-  #end
-
 
   def test_speed_comparison
     times = 10

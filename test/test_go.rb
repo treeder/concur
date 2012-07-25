@@ -8,6 +8,13 @@ require_relative 'job'
 
 class TestGo < Test::Unit::TestCase
 
+  def test_a
+    #@queue = Queue.new
+    #x = @queue.pop
+    #ch = Concur::Channel.new
+    #x = ch.shift
+  end
+
   def test_go
 
     Concur.config.max_threads = 10

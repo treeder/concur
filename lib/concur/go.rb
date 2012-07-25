@@ -32,8 +32,14 @@ module Concur
     def <<(ob)
       @queue << ob
     end
+
     def shift
-      @queue.shift
+      begin
+        @queue.shift
+      rescue Exception => ex
+        p ex
+        return nil
+      end
     end
   end
 end
