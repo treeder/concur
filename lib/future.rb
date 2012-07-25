@@ -28,23 +28,21 @@ module Concur
 
     end
 
-    def run
+    def run(channel=nil)
       #Concur.logger.debug 'running StandardFuture'
       begin
         @result = @callable.call(@channel)
         Concur.logger.debug 'callable result: ' + @result.inspect
       rescue Exception => ex
-        Concur.logger.debug "Error occurred! #{ex.class.name}: #{ex.message}"
+        Concur.logger.debug "Error occurred! #{ex.class.name}: #{ex.message}: " + ex.backtrace.inspect
         @ex = ex
       end
-      @mutex.synchronize do # do we even need to synchronize? run should only ever be called once
-        @complete = true
-      end
+      @complete = true
       @cv.broadcast
 
     end
 
-    def call
+    def call(channel=nil)
       run
     end
 

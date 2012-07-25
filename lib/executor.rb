@@ -26,7 +26,7 @@ module Concur
       end
 
       def http_request(params, &blk)
-
+        puts 'http_request is deprecated'
         f = StandardFuture.new do
           conn = Faraday.new(:url => params[:base_url]) do |builder|
   #          builder.use Faraday::Request::UrlEncoded # convert request params as "www-form-urlencoded"
@@ -98,14 +98,14 @@ module Concur
 
   # todo: should maybe have these backends extend Executor and just override what's necessary
   class SingleThreaded < Executor::Base
-    def process(f=nil, &blk)
-      f = StandardFuture.new(f, &blk)
+    def process(f=nil, channel=nil, &blk)
+      f = StandardFuture.new(f, channel, &blk)
       f.call
       f
     end
 
-    def execute(f=nil, &blk)
-         process(f, &blk)
+    def execute(f=nil, channel=nil, &blk)
+         process(f, channel, &blk)
        end
 
     def shutdown
@@ -114,8 +114,8 @@ module Concur
 
   # Spins off a new thread per job
   class MultiThreaded < Executor::Base
-    def process(f=nil, &blk)
-      f = StandardFuture.new(f, &blk)
+    def process(f=nil, channel=nil, &blk)
+      f = StandardFuture.new(f, channel, &blk)
       @thread = Thread.new do
         f.call
       end
@@ -123,8 +123,8 @@ module Concur
       f
     end
 
-    def execute(f=nil, &blk)
-      process(f, &blk)
+    def execute(f=nil, channel=nil, &blk)
+      process(f, channel, &blk)
     end
 
     def shutdown

@@ -8,16 +8,6 @@ require_relative 'job'
 class TestConcur < Test::Unit::TestCase
   @@durations = []
 
-  @@urls = ["http://www.yahoo.com", "http://www.microsoft.com", "http://www.github.com", "http://www.google.com",
-            "http://www.amazon.com", "http://www.twitter.com", "http://www.blogger.com", "http://rubygems.org",
-            "http://rubylang.org", "http://www.wikipedia.com", "http://www.appoxy.com", "http://www.simpleworker.com",
-            "http://blog.simpleworker.com", "http://blog.appoxy.com", "http://www.techcrunch.com", "http://www.yelp.com"
-  ]
-
-  def self.urls
-    @@urls
-  end
-
   def test_threaded_http_request
     executor = Concur::Executor.new_multi_threaded_executor()
 
@@ -85,6 +75,8 @@ class TestConcur < Test::Unit::TestCase
   def test_speed_comparison
     times = 10
 
+    # todo: use quicky gem
+
     executor = Concur::Executor.new_single_threaded_executor
     non_concurrent_duration = run_gets("non concurrent", executor)
     executor.shutdown
@@ -104,6 +96,7 @@ class TestConcur < Test::Unit::TestCase
     #assert em_duration < (non_concurrent_duration/2)
     #executor.shutdown
 
+    puts "----"
     @@durations.each do |s|
       puts s
     end
@@ -115,7 +108,8 @@ class TestConcur < Test::Unit::TestCase
     start_time = Time.now
 
     futures = []
-    TestConcur.urls.each do |url|
+    100.times do |i|
+      url = "http://rest-test.iron.io/codes/200"
       params_to_send = {}
       params_to_send[:base_url] = url
       params_to_send[:path] = "/"
