@@ -1,5 +1,41 @@
 # Concur - A concurrency library for Ruby inspired by java.util.concurrency
 
+## NEW Go Style Usage
+
+```ruby
+require 'concur/go'
+
+# set max threads (optional)
+Concur.config.max_threads = 10
+
+# fire off blocks using go
+1.times do |i|
+  go do
+    puts "hello #{i}"
+    sleep 2
+    puts "#{i} awoke"
+    puts "hhi there"
+  end
+  puts "done #{i}"
+end
+
+# Use channels to communicate
+ch = Concur::Channel.new
+20.times do |i|
+  go(ch) do |ch|
+    puts "hello channel #{i} #{ch}"
+    sleep 2
+    # push to channel
+    ch << "pushed #{i} to channel"
+  end
+end
+
+# Read from channel
+ch.each do |x|
+  puts "Got #{x} from channel"
+end
+```
+
 ## General Usage
 
     # Choose which executor you want, there are several to choose from
@@ -22,6 +58,8 @@
     executor.shutdown
 
 ## EventMachine / Non-blocking I/O
+
+DEPRECATED!!
 
 Perhaps more important/interesting these days is EventMachine/non-blocking io. When your program is io bound you can
 get similar performance (if not better) on a single thread as you can with multi-threads.
