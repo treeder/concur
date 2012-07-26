@@ -40,8 +40,12 @@ class TestGo < Test::Unit::TestCase
     end
 
     puts "waiting on channel..."
-    ch.each do |x|
-      puts "Got #{x} from channel"
+    begin
+      ch.each do |x|
+        puts "Got #{x} from channel"
+      end
+    rescue Exception => ex
+      p ex
     end
 
 
