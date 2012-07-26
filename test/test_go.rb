@@ -30,7 +30,7 @@ class TestGo < Test::Unit::TestCase
     end
 
     ch = Concur::Channel.new
-    100.times do |i|
+    20.times do |i|
       go(ch) do |ch|
         puts "hello channel #{i} #{ch}"
         sleep 2
@@ -40,9 +40,10 @@ class TestGo < Test::Unit::TestCase
     end
 
     puts "waiting on channel..."
-    while (x = ch.shift) do
+    ch.each do |x|
       puts "Got #{x} from channel"
     end
+
 
   end
 

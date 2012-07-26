@@ -34,11 +34,22 @@ module Concur
     end
 
     def shift
-      begin
+      #begin
         @queue.shift
-      rescue Exception => ex
-        p ex
-        return nil
+      #rescue Exception => ex
+      #  puts ex.class.name
+      #  p ex
+      #  if ex.class.name == "fatal"
+      #    return nil
+      #  end
+      #  raise ex
+      #end
+    end
+
+    def each(&blk)
+      while (x = shift) do
+        #break if x.nil?
+        yield x
       end
     end
   end
