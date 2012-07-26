@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email = "travis@appoxy.com"
   s.extra_rdoc_files = [
     "LICENSE.markdown",
-    "README.markdown"
+    "README.md"
   ]
   s.files = [
     "lib/completer.rb",
