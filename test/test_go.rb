@@ -1,10 +1,8 @@
 gem 'test-unit'
 require 'test/unit'
-require 'em-http'
 require_relative '../lib/concur'
 require_relative '../lib/concur/go'
 require_relative 'job'
-
 
 class TestGo < Test::Unit::TestCase
 
@@ -40,14 +38,9 @@ class TestGo < Test::Unit::TestCase
     end
 
     puts "waiting on channel..."
-    begin
-      ch.each do |x|
-        puts "Got #{x} from channel"
-      end
-    rescue Exception => ex
-      p ex
+    ch.each do |x|
+      puts "Got #{x} from channel"
     end
-
 
   end
 

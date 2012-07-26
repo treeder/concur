@@ -34,21 +34,21 @@ module Concur
     end
 
     def shift
-      #begin
+      begin
         @queue.shift
-      #rescue Exception => ex
-      #  puts ex.class.name
-      #  p ex
-      #  if ex.class.name == "fatal"
-      #    return nil
-      #  end
-      #  raise ex
-      #end
+      rescue Exception => ex
+        #puts ex.class.name
+        #p ex
+        #p ex.message
+        if ex.class.name == "fatal" && ex.message.include?("deadlock")
+          return nil
+        end
+        raise ex
+      end
     end
 
     def each(&blk)
       while (x = shift) do
-        #break if x.nil?
         yield x
       end
     end
