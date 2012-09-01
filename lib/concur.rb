@@ -6,6 +6,7 @@ require_relative 'thread_pool'
 
 module Concur
   @@logger = Logger.new(STDOUT)
+  @@logger.level = Logger::INFO
   @@config = Config.new
 
   def self.logger
