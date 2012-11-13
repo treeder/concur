@@ -3,6 +3,7 @@ require 'logger'
 require_relative 'concur/config'
 require_relative 'executor'
 require_relative 'thread_pool'
+require_relative 'concur/go'
 
 module Concur
   @@logger = Logger.new(STDOUT)
