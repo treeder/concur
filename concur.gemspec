@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Travis Reeder"]
   s.date = "2012-07-26"
   s.description = "A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com"
-  s.email = "travis@appoxy.com"
+  s.email = "treeder@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.markdown",
     "README.md"
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
     "lib/runnable.rb",
     "lib/thread_pool.rb"
   ]
-  s.homepage = "http://github.com/appoxy/concur/"
+  s.homepage = "http://github.com/treeder/concur/"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
   s.summary = "A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com"
