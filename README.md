@@ -3,7 +3,7 @@
 ## NEW Go Style Usage
 
 ```ruby
-require 'concur/go'
+require 'concur'
 
 # set max threads (optional)
 Concur.config.max_threads = 10
@@ -22,7 +22,7 @@ end
 # Use channels to communicate
 ch = Concur::Channel.new
 20.times do |i|
-  go(ch) do |ch|
+  go do
     puts "hello channel #{i} #{ch}"
     sleep 2
     # push to channel
