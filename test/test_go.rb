@@ -17,10 +17,10 @@ class TestGo < Test::Unit::TestCase
 
     Concur.config.max_threads = 10
 
-    1.times do |i|
+    3.times do |i|
       go do
         puts "hello #{i}"
-        sleep 2
+        sleep 1
         puts "#{i} awoke"
         puts "hhi there"
       end
@@ -28,19 +28,61 @@ class TestGo < Test::Unit::TestCase
     end
 
     ch = Concur::Channel.new
-    20.times do |i|
-      go(ch) do |ch|
+    times = 10
+    times.times do |i|
+      go do
         puts "hello channel #{i} #{ch}"
-        sleep 2
+        sleep 1
         # push to channel
         ch << "pushed #{i} to channel"
       end
     end
 
     puts "waiting on channel..."
+    i = 0
     ch.each do |x|
       puts "Got #{x} from channel"
+      i += 1
     end
+    assert_equal times, i
+
+
+    # Pass different objects back
+    ch = Concur::Channel.new
+    times = 10
+    times.times do |i|
+      go do
+        begin
+          raise "Error yo!" if i % 5 == 0
+          puts "hello channel #{i} #{ch}"
+          sleep 1
+          # push to channel
+          ch << "pushed #{i} to channel"
+        rescue => ex
+          ch << ex
+        end
+      end
+    end
+
+    puts "waiting on channel..."
+    i = 0
+    errs = 0
+    ch.each do |x|
+      puts "Got #{x} from channel"
+      i += 1
+      case x
+        when String
+          puts "String"
+        when Exception
+          puts "Exception!"
+          errs += 1
+        else
+          puts "something else"
+      end
+    end
+    assert_equal times, i
+    assert_equal times / 5, errs
+
 
   end
 

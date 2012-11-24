@@ -1,23 +1,39 @@
 # Concur - A concurrency library for Ruby inspired by java.util.concurrency
 
+## Getting Started
+
+Install gem:
+
+```
+gem install concur
+```
+
 ## NEW Go Style Usage
 
+### Basic
+
 ```ruby
-require 'concur/go'
+require 'concur'
 
 # set max threads (optional)
 Concur.config.max_threads = 10
 
 # fire off blocks using go
-1.times do |i|
+100.times do |i|
   go do
     puts "hello #{i}"
-    sleep 2
+    sleep 1
     puts "#{i} awoke"
-    puts "hhi there"
+    puts "hi there"
   end
   puts "done #{i}"
 end
+```
+
+### Use channels to communicate
+
+```ruby
+require 'concur'
 
 # Use channels to communicate
 ch = Concur::Channel.new
@@ -35,6 +51,39 @@ ch.each do |x|
   puts "Got #{x} from channel"
 end
 ```
+
+### Catching exceptions and checking for different return types on the channel
+
+```ruby
+require 'concur'
+
+# Use channels to communicate
+ch = Concur::Channel.new
+20.times do |i|
+  go(ch) do |ch|
+    begin
+      puts "hello channel #{i}"
+      ch << "pushed #{i} to channel"
+    rescue => ex
+      ch << ex
+    end
+  end
+end
+
+# Read from channel
+ch.each do |m|
+  puts "Got #{m} from channel"
+  case m
+    when String
+      puts m
+    when Exception
+      puts "ERROR!!! #{m}"
+    else
+      puts "Something else: #{m}"
+  end
+end
+```
+
 
 ## General Usage
 
