@@ -1,4 +1,3 @@
-require 'faraday'
 require_relative 'runnable'
 require_relative 'future'
 
@@ -24,36 +23,6 @@ module Concur
       def execute
         raise "execute() not implemented, this is an invalid implemention."
       end
-
-      def http_request(params, &blk)
-        puts 'http_request is deprecated'
-        f = StandardFuture.new do
-          conn = Faraday.new(:url => params[:base_url]) do |builder|
-  #          builder.use Faraday::Request::UrlEncoded # convert request params as "www-form-urlencoded"
-  #          builder.use Faraday::Request::JSON # encode request params as json
-  #          builder.use Faraday::Response::Logger # log the request to STDOUT
-            builder.use Faraday::Adapter::NetHttp # make http requests with Net::HTTP
-  #
-  #          # or, use shortcuts:
-  #          builder.request :url_encoded
-  #          builder.request :json
-  #          builder.response :logger
-  #          builder.adapter :net_http
-          end
-          if params[:http_method] == :post
-            response = conn.post params[:path]
-          else
-            response = conn.get params[:path]
-          end
-          if block_given?
-            response = blk.call(response)
-          end
-          response
-        end
-        process(f)
-        f
-      end
-
 
       def queue_size
         0

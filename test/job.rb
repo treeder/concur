@@ -1,6 +1,5 @@
 require_relative '../lib/runnable'
-require 'rest-client'
-require 'eventmachine'
+require 'rest'
 
 class Job
   include Concur::Runnable
@@ -10,6 +9,7 @@ class Job
     if options[:em]
       @em = true
     end
+    @rest = Rest::Client.new
   end
 
   def em_request(url)
@@ -45,7 +45,7 @@ class Job
 
   def get(url)
     puts 'getting ' + url
-    RestClient.get "http://#{url}"
+    @rest.get "http://#{url}"
   end
 
 end

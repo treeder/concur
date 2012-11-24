@@ -1,4 +1,4 @@
-# Concur - A concurrency library for Ruby inspired by java.util.concurrency
+# Concur - A concurrency library for Ruby inspired by java.util.concurrency and Go (golang).
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ require 'concur'
 # Use channels to communicate
 ch = Concur::Channel.new
 20.times do |i|
-  go(ch) do |ch|
+  go do
     puts "hello channel #{i} #{ch}"
     sleep 2
     # push to channel
