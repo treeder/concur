@@ -60,7 +60,7 @@ require 'concur'
 # Use channels to communicate
 ch = Concur::Channel.new
 20.times do |i|
-  go(ch) do |ch|
+  go do
     begin
       puts "hello channel #{i}"
       ch << "pushed #{i} to channel"
