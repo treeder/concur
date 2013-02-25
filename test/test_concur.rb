@@ -1,5 +1,6 @@
 gem 'test-unit'
 require 'test/unit'
+require 'rest'
 require_relative '../lib/concur'
 require_relative 'job'
 
@@ -41,20 +42,19 @@ class TestConcur < Test::Unit::TestCase
   def run_gets(name, executor)
     puts "Running #{name}..."
     start_time = Time.now
+    rest = Rest::Client.new
 
     futures = []
-    100.times do |i|
-      url = "http://rest-test.iron.io/codes/200"
-      params_to_send = {}
-      params_to_send[:base_url] = url
-      params_to_send[:path] = "/"
-      params_to_send[:http_method] = :get
-      futures << executor.http_request(params_to_send)
+    10.times do |i|
+      url = "http://rest-test.iron.io/code/200"
+      futures << executor.execute() do
+        response = rest.get(url)
+      end
     end
     futures.each do |f|
       puts 'f=' + f.inspect
 #      puts 'got=' + f.get.inspect
-      assert f.get.status >= 200 && f.get.status < 400
+      assert f.get.code >= 200 && f.get.code < 400
     end
     concurrent_duration = Time.now - start_time
     o = "#{name} duration=" + concurrent_duration.to_s
