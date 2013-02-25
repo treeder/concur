@@ -21,5 +21,3 @@ module Concur
   end
 
 end
-
-require_relative 'concur/go'

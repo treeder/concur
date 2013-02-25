@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
   s.date = "2012-11-13"
-  s.description = "A concurrency library for Ruby inspired by java.util.concurrency and Go (golang). By http://www.appoxy.com"
-  s.email = "travis@appoxy.com"
+  s.description = "A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com"
+  s.email = "treeder@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.markdown",
     "README.md"
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/treeder/concur/"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "A concurrency library for Ruby inspired by java.util.concurrency and Go (golang). By http://www.appoxy.com"
+  s.summary = "A concurrency library for Ruby inspired by java.util.concurrency. By http://www.appoxy.com"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
