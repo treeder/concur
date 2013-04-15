@@ -10,7 +10,6 @@ begin
         gemspec.description = "A concurrency library for Ruby inspired by java.util.concurrency and Go (golang). By http://www.appoxy.com"
         gemspec.authors = ["Travis Reeder"]
         gemspec.files = FileList['lib/**/*.rb']
-        #gemspec.add_dependency 'faraday'
     end
     Jeweler::GemcutterTasks.new
 rescue LoadError

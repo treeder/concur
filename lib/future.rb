@@ -34,11 +34,17 @@ module Concur
         @result = @callable.call(@channel)
         Concur.logger.debug 'callable result: ' + @result.inspect
       rescue Exception => ex
-        Concur.logger.debug "Error occurred! #{ex.class.name}: #{ex.message}: " + ex.backtrace.inspect
+        Concur.logger.info "Error occurred! #{ex.class.name}: #{ex.message}: " + ex.backtrace.inspect
         @ex = ex
+      end
+      if @channel
+        r = (@result || @ex)
+        puts "pusing #{r} to channel"
+        @channel << r
       end
       @complete = true
       @cv.broadcast
+
 
     end
 
